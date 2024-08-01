@@ -57,13 +57,13 @@
 
 @media screen and (min-width: 990px) {
   .product--large:not(.product--no-media) .product__media-wrapper {
-    max-width: 65%;
+    max-width: 30%;
     width: calc(65% - var(--grid-desktop-horizontal-spacing) / 2);
   }
 
   .product--large:not(.product--no-media) .product__info-wrapper {
     padding: 0 0 0 4rem;
-    max-width: 35%;
+    max-width: 70%;
     width: calc(35% - var(--grid-desktop-horizontal-spacing) / 2);
   }
 
@@ -163,11 +163,20 @@
 .product-form__input {
   flex: 0 0 100%;
   padding: 0;
-  margin: 0 0 1.2rem 0;
+  margin: 0 0 2.5rem 0;
   max-width: 37rem;
   min-width: fit-content;
   border: none;
-}
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  }
+
+  @media screen and (max-width: 990px) {
+    .product-form__input {
+      justify-content: center;
+    }
+  }
 
 variant-radios,
 variant-selects {
@@ -184,6 +193,7 @@ variant-selects {
 
 fieldset.product-form__input .form__label {
   margin-bottom: 0.2rem;
+  font-weight: 600;
 }
 
 .product-form__input input[type='radio'] {
@@ -231,6 +241,16 @@ fieldset.product-form__input .form__label {
 .product-form__input input[type='radio']:checked + label {
   background-color: rgb(var(--color-foreground));
   color: rgb(var(--color-background));
+}
+
+.product-form__input input[type='radio'] + label {
+  border-radius: 50%;
+  height: 90px;
+  width: 90px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
 }
 
 @media screen and (forced-colors: active) {
@@ -303,9 +323,9 @@ fieldset.product-form__input .form__label {
 
 /* Product info */
 
-.product__info-container > * + * {
+/* .product__info-container > * + * {
   margin: 1.5rem 0;
-}
+} */
 
 .product__info-container iframe {
   max-width: 100%;
@@ -313,7 +333,7 @@ fieldset.product-form__input .form__label {
 
 .product__info-container .product-form,
 .product__info-container .product__description {
-  margin: 2.5rem 0;
+  margin: 0 0 2.5rem 0;
 }
 
 .product__text {
@@ -333,6 +353,11 @@ a.product__text {
 .product__title {
   word-break: break-word;
   margin-bottom: 1.5rem;
+}
+
+.product__title h1{
+  font-weight: 700;
+  font-size: 27px;
 }
 
 .product__title > * {
@@ -1243,4 +1268,22 @@ a.product__text {
   width: 1.2rem;
   margin-left: 1.2rem;
   flex-shrink: 0;
+}
+
+.product-form__buttons {
+  display: flex;
+}
+.shopify-payment-button {
+  width: 50%;
+  height: 56px;
+}
+
+.shopify-payment-button__button {
+  height: 56px;
+}
+
+button.product-form__submit.button {
+  width: 50%;
+  margin-right: 1rem;
+  height: 56px;
 }
