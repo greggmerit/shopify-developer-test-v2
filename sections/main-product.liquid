@@ -375,7 +375,7 @@
                   </div>
                 </details>
               </div>
-            Í
+            
             {%- when 'quantity_selector' -%}
               <div
                 class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
@@ -410,10 +410,11 @@
                     {% render 'icon-plus' %}
                   </button>
                 </quantity-input>
+                
               </div>
-            </div>
-            <div>
-            <h3 class="price-item price-item--regular">Your total: {{ product.price | money }}</h3>
+              <h3 class="price-item price-item--regular">Your total: {{ product.price | money }}</h3>
+            
+            
               
             {%- when 'popup' -%}
               <modal-opener
