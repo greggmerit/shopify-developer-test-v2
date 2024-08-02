@@ -27,6 +27,7 @@
   {%- endstyle -%}
 
   <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-qty-and-variants.js' | asset_url }}" defer="defer"></script>
 
   {%- assign first_3d_model = product.media | where: "media_type", "model" | first -%}
   {%- if first_3d_model -%}
@@ -376,43 +377,7 @@
                 </details>
               </div>
             
-            {%- when 'quantity_selector' -%}
-              <div
-                class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
-                {{ block.shopify_attributes }}
-              >
-                {% comment %} <label class="form__label" for="Quantity-{{ section.id }}">
-                  {{ 'products.product.quantity.label' | t }}
-                </label>   {% endcomment %}
-
-                <quantity-input class="quantity">
-                  <button class="quantity__button no-js-hidden" name="minus" type="button">
-                    <span class="visually-hidden">
-                      {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
-                    </span>
-                    {% render 'icon-minus' %}
-                  </button>
-
-                  <input
-                    class="quantity__input"
-                    type="number"
-                    name="quantity"
-                    id="Quantity-{{ section.id }}"
-                    min="1"
-                    value="1"
-                    form="{{ product_form_id }}"
-                  >
-
-                  <button class="quantity__button no-js-hidden" name="plus" type="button">
-                    <span class="visually-hidden">
-                      {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
-                    </span>
-                    {% render 'icon-plus' %}
-                  </button>
-                </quantity-input>
-                
-              </div>
-              <h3 class="price-item price-item--regular">Your total: {{ product.price | money }}</h3>
+            
             
             
               
@@ -478,6 +443,9 @@
               <script src="{{ 'share.js' | asset_url }}" defer="defer"></script>
            
             {%- when 'variant_picker' -%}
+
+            
+
               {%- unless product.has_only_default_variant -%}
                 {%- if block.settings.picker_type == 'button' -%}
                   <variant-radios
@@ -488,8 +456,8 @@
                   >
                     {%- for option in product.options_with_values -%}
                       <fieldset class="js product-form__input">
-                        <legend class="form__label">{{ option.name }}: {{ product.selected_or_first_available_variant.title }}</legend>
-                        
+                        <legend id="selectedVariantTitle" class="form__label variant__title">{{ option.name }}: <span class="variant__option" id="variantTitle">None</span></legend>
+
                         {%- for value in option.values -%}
                          <input
                             type="radio"
@@ -595,7 +563,43 @@
                   </div>
                 </div>
               </noscript>
+            
             {%- when 'buy_buttons' -%}
+              
+            <div class="product-form__wrapper">
+              <div class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}" {{ block.shopify_attributes }} >
+                
+                <script>
+                    const unitPrice = {{ product.price | money_without_currency | remove: ',' | escape }};
+                </script>
+                <quantity-input class="quantity">
+                    <button class="quantity__button no-js-hidden" name="minus" type="button">
+                        <span class="visually-hidden">Decrease quantity</span>
+                        {% render 'icon-minus' %}
+                    </button>
+
+                    <input
+                        class="quantity__input"
+                        type="number"
+                        name="quantity"
+                        id="Quantity-{{ section.id }}"
+                        min="1"
+                        step=".1"
+                        value="1"
+                        form="product_form"
+                    >
+
+                    <button class="quantity__button no-js-hidden" name="plus" type="button">
+                        <span class="visually-hidden">Increase quantity</span>
+                        {% render 'icon-plus' %}
+                    </button>
+                </quantity-input>
+                <h3 class="product-cost">
+                    Total Cost: $<span id="totalCost"></span>
+                </h3>
+              </div>
+              
+              
               <div {{ block.shopify_attributes }} class="buy_buttons">
                 <product-form class="product-form">
                   <div class="product-form__error-message-wrapper" role="alert" hidden>
@@ -686,9 +690,8 @@
 
               <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
             
+            </div>
             
-            
-
             {%- when 'rating' -%}
               {%- if product.metafields.reviews.rating.value != blank -%}
                 {% liquid
